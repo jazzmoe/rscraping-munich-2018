@@ -23,7 +23,9 @@ p_needed <- c("rvest", # scraping suite
               "readtext", # import text files for quantitative text analysis
               "glmnet", # lasso and elastic-net generalized linear models 
               "doMC", # multi-core processing
-              "xgboost" # extreme gradient boosting
+              "xgboost", # extreme gradient boosting
+              "topicmodels", # topic modeling with LDA
+              "stm" # structural topic modeling
 )
 packages <- rownames(installed.packages())
 p_to_install <- p_needed[!(p_needed %in% packages)]
