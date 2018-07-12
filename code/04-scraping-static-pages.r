@@ -1,6 +1,6 @@
 ### -----------------------------
 ## simon munzert
-## web scraping
+## scraping static pages
 ### -----------------------------
 
 
@@ -8,33 +8,6 @@
 
 library(rvest)
 library(stringr)
-
-
-## inspect the source code in your browser ---------------
-
-browseURL("https://www.nytimes.com/")
-
-# Chrome:
-  # 1. right click on page
-  # 2. select "view source"
-
-# Firefox:
-  # 1. right click on page
-  # 2. select "view source"
-
-# Microsoft Edge:
-# 1. right click on page
-# 2. select "view source"
-
-# Safari
-  # 1. click on "Safari"
-  # 2. select "Preferences"
-  # 3. go to "Advanced"
-  # 4. check "Show Develop menu in menu bar"
-  # 5. click on "Develop"
-  # 6. select "show page source"
-  # 7. alternatively to 5./6., right click on page and select "view source"
-
 
 
 ## basic workflow of scraping with rvest  ----------
@@ -58,7 +31,7 @@ headings <- html_text(headings_nodes)
 
 
 # 5. tidy headlines
-headings <- str_replace_all(headings, "\\n|\\t|\\r", "") %>% str_trim()
+headings <- str_replace_all(headings, "\\n|\\t|\\r", " ") %>% str_trim()
 head(headings)
 length(headings)
 
@@ -72,11 +45,15 @@ length(headings)
   # ... come with standard tags and are usually easily identifiable
 
 ## scraping HTML tables with rvest
-
-url_p <- read_html("https://en.wikipedia.org/wiki/List_of_human_spaceflights")
+url_p <- read_html("https://en.wikipedia.org/wiki/List_of_MPs_elected_in_the_United_Kingdom_general_election,_1992")
 tables <- html_table(url_p, header = TRUE, fill = TRUE)
-spaceflights <- tables[[1]]
-spaceflights
+mps <- tables[[4]]
+head(mps)
+names(mps) <- c("constituency", "mp", "party")
+mps <- mps[2:nrow(mps),]
+mps <- filter(mps, !str_detect(constituency, fixed("[edit]")))
+
+table(mps$party, str_detect(mps$mp, "^Sir ")) # how many "Sirs" per party?
 
 ## note: HTML tables can get quite complex. there are more flexible solutions than html_table() on the market (e.g., package "htmltab") 
 

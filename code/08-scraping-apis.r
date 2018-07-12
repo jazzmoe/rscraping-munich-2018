@@ -23,7 +23,7 @@ browseURL("https://cran.r-project.org/web/views/WebTechnologies.html")
 browseURL("http://ip-api.com/")
 
 # ipapi package
-devtools::install_github("hrbrmstr/ipapi")
+#devtools::install_github("hrbrmstr/ipapi")
 library(ipapi)
 
 # function call
@@ -32,37 +32,29 @@ View(ip_df)
 
 
 
-## example: arxiv.org API
+## example: NY Times API
 
-# overview and documentation: 
-browseURL("http://arxiv.org/help/api/index")
-browseURL("http://arxiv.org/help/api/user-manual")
+# overview
+browseURL("https://cran.r-project.org/web/packages/rtimes/vignettes/rtimes_vignette.html")
+browseURL("http://developer.nytimes.com/article_search_v2.json#/README")
 
-# access api manually:
-browseURL("http://export.arxiv.org/api/query?search_query=all:forecast")
-forecast <- read_xml("http://export.arxiv.org/api/query?search_query=all:forecast")
-xml_ns(forecast) # inspect namespaces
-authors <- xml_find_all(forecast, "//d1:author", ns = xml_ns(forecast))
-authors %>% xml_text()
+# register for key at
+browseURL("http://developer.nytimes.com/")
 
-# use ready-made binding, the aRxiv package
-library(aRxiv)
+# use API
+library(rtimes)
+load("/Users/s.munzert/Munzert Dropbox/Simon Munzert/rkeys.RDa")
+Sys.setenv(NYTIMES_AS_KEY = nytimes_apikey)
 
-# overview 
-browseURL("http://ropensci.org/tutorials/arxiv_tutorial.html")
-ls("package:aRxiv")
+terms <- c("John McCain", "Nancy Pelosi", "Bernie Sanders", "Al Franken", "Marco Rubio", "Paul Ryan", "Elizabeth Warren", "Mitch McConnell", "Tim Kaine", "Dianne Feinstein")
 
-# access API with wrapper
-?arxiv_search
-arxiv_df <- arxiv_search(query = "forecast AND submittedDate:[2016 TO 2017]", limit = 200, output_format = "data.frame")
-View(arxiv_df)
-
-arxiv_count('au:"Gary King"')
-query_terms
-
-arxiv_count('abs:"political" AND submittedDate:[2016 TO 2017]')
-polsci_articles <- arxiv_search('abs:"political" AND submittedDate:[2016 TO 2017]', limit = 200)
-
+nytimes_hits <- numeric()
+for(i in seq_along(terms)) {
+  nytimes_hits[i] <-  as_search(q = terms[i], begin_date = "20170103", end_date = '20180601')$meta$hits
+  Sys.sleep(runif(1, 1, 2))
+}
+nytimes_hits_df <- data.frame(name = terms, nytimes_hits, stringsAsFactors = FALSE)
+head(nytimes_hits_df)
 
 
 
@@ -94,21 +86,17 @@ ip_list %>% unlist %>% t %>% as.data.frame(stringsAsFactors = FALSE)
 # manual API call, JSON data
 url <- "http://ip-api.com/json"
 ip_parsed <- jsonlite::fromJSON(url)
-ip_parsed <- jsonlite::fromJSON(url, flatten = TRUE)
-
-ip_parsed %>% unlist %>% t %>% as.data.frame(stringsAsFactors = FALSE)
-
-ip_parsed %>% as.data.frame(ip_parsed, stringsAsFactors = FALSE)
+as.data.frame(ip_parsed, stringsAsFactors = FALSE)
 
 # modify call
-fromJSON("http://ip-api.com/json/72.33.67.89") %>% unlist %>% t %>% as.data.frame(stringsAsFactors = FALSE)
-fromJSON("http://ip-api.com/json/www.spiegel.de") %>% unlist %>% t %>% as.data.frame(stringsAsFactors = FALSE)
+fromJSON("http://ip-api.com/json/72.33.67.89") %>% as.data.frame(stringsAsFactors = FALSE)
+fromJSON("http://ip-api.com/json/www.spiegel.de") %>% as.data.frame(stringsAsFactors = FALSE)
 
 # build function
 ipapi_grabber <- function(ip = "") {
-  dat <- fromJSON(paste0("http://ip-api.com/json/", ip)) %>% unlist %>% t %>% as.data.frame(stringsAsFactors = FALSE)
+  dat <- fromJSON(paste0("http://ip-api.com/json/", ip)) %>% as.data.frame(stringsAsFactors = FALSE)
   dat
 }
-ipapi_grabber("72.33.67.89")
+ipapi_grabber("193.17.243.1")
 
 

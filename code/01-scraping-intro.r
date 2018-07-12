@@ -7,6 +7,33 @@
 source("packages.r")
 
 
+## inspect the source code in your browser ---------------
+
+browseURL("http://www.biermap24.de/brauereiliste.php")
+
+# Chrome:
+# 1. right click on page
+# 2. select "view source"
+
+# Firefox:
+# 1. right click on page
+# 2. select "view source"
+
+# Microsoft Edge:
+# 1. right click on page
+# 2. select "view source"
+
+# Safari
+# 1. click on "Safari"
+# 2. select "Preferences"
+# 3. go to "Advanced"
+# 4. check "Show Develop menu in menu bar"
+# 5. click on "Develop"
+# 6. select "show page source"
+# 7. alternatively to 5./6., right click on page and select "view source"
+
+
+
 ## case study 1: map breweries in Germany -------
 
 ##  goal
@@ -16,7 +43,7 @@ source("packages.r")
 # put them on a map
 
 # set temporary working directory
-tempwd <- ("data/breweriesGermany")
+tempwd <- ("../data/breweriesGermany")
 dir.create(tempwd)
 setwd(tempwd)
 
@@ -53,7 +80,7 @@ p <- ggmap(brewery_map) + geom_point(data=pos, aes(x=lon, y=lat), col="red", siz
 p
 
 ## return to base working drive
-setwd("../../")
+setwd("../../code")
 
 
 
@@ -69,7 +96,7 @@ setwd("../../")
 
 
 # set temporary working directory
-tempwd <- ("data/wikipediaStatisticians")
+tempwd <- ("../data/wikipediaStatisticians")
 dir.create(tempwd)
 setwd(tempwd)
 

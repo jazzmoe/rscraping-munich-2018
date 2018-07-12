@@ -20,6 +20,27 @@ irish_dfm
 irish_dfm <- dfm(data_corpus_irishbudget2010, remove_punct = TRUE)
 irish_dfm
 
+
+# dfm has many useful options
+irish_dfm <- dfm(data_corpus_irishbudget2010, 
+                 tolower = TRUE,
+                 remove_punct = TRUE,
+                 stem = TRUE,
+                 ngrams = 1:3 # passed on to tokens()
+                 )
+irish_dfm
+
+# dealing with stop words
+stopwords("english")
+stopwords("german")
+irish_dfm <- dfm(data_corpus_irishbudget2010, 
+                 remove_punct = TRUE, 
+                 remove=c(stopwords("english"), "£"), 
+                 verbose = TRUE)
+
+
+## do more things with DFMs ---------------------
+
 # check number of documents, features, document names, feature names
 ndoc(irish_dfm)
 nfeat(irish_dfm)

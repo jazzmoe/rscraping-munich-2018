@@ -15,7 +15,19 @@ library(ggmap)
 
 ### regular expressions --------------------
 
-# 1. Refining "Blowin' In The Wind" 
+## 1. describe the types of strings that conform to the following regular expressions and construct an example that is matched by the regular expression.
+str_extract_all("Phone 150$, PC 690$", "[0-9]+\\$") # example
+"\\b[a-z]{1,4}\\b"
+".*?\\.txt$"
+"\\d{2}/\\d{2}/\\d{4}"
+"<(.+?)>.+?</\\1>"
+
+## 2. consider the mail address  chunkylover53[at]aol[dot]com.
+# a) transform the string to a standard mail format using regular expressions.
+# b) imagine we are trying to extract the digits in the mail address using [:digit:]. explain why this fails and correct the expression.
+email <- "chunkylover53[at]aol[dot]com"
+
+## 3. Refining "Blowin' In The Wind" 
 
 # In the following you see the lyrics of Bob Dylan's "Blowin' In The Wind".
 # a) Replace all words "man" and "friend" with "dog"!

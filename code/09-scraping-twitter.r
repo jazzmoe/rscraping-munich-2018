@@ -32,22 +32,28 @@ browseURL("https://mkearney.github.io/rtweet/articles/auth.html")
 
 TwitterToR_twitterkey <- "uBoAsdknehdiosd8nkhk234aTIApT"  # <--- add your Twitter key here!
 TwitterToR_twittersecret <- "myhHWkdjUhgaljsekh4ksfg8sK8tthJFl9fHJKLAnehkxi4nlYlQM" # <--- add your Twitter secret here!
+TwitterToR_accesstoken <- "124573244-6Nd4dklsfj483Jzfeskg9GJCtD"  # <--- add your Twitter access token here!
+TwitterToR_accesssecret <- "myhHWkkd872kHnk32k4HkfjKLAnehkxi4nlYlQM" # <--- add your Twitter secret here!
 
 save(TwitterToR_twitterkey,
      TwitterToR_twittersecret,
+     TwitterToR_accesstoken,
+     TwitterToR_accesssecret,
      file = paste0(normalizePath("~/"),"/rkeys.RDa")) # <--- this is where your keys are locally stored!
 
 ## name assigned to created app
 appname <- "TwitterToR" # <--- add your Twitter App name here!
 
 ## api key (example below is not a real key)
-load("/Users/simonmunzert/rkeys.RDa") # <--- adapt path here; see above!
+load("/Users/s.munzert/Munzert Dropbox/Simon Munzert/rkeys.RDa") # <--- adapt path here; see above!
 
 ## register app
 twitter_token <- create_token(
   app = appname,
   consumer_key = TwitterToR_twitterkey,
   consumer_secret = TwitterToR_twittersecret,
+  access_token = TwitterToR_accesstoken,
+  access_secret = TwitterToR_accesssecret,
   set_renv = FALSE)
 
 ## check if everything worked
@@ -62,15 +68,9 @@ browseURL("https://developer.twitter.com/en/docs/tweets/search/guides/standard-o
 
 merkel <- search_tweets("merkel", n = 1000, include_rts = FALSE, lang = "de")
 
-storch_bad <- search_tweets(URLencode("storch :("), n = 100, include_rts = FALSE, lang = "de", token = twitter_token)
-storch_good <- search_tweets(URLencode("storch :)"), n = 100, include_rts = FALSE, lang = "de", token = twitter_token)
-storch_images <- search_tweets(URLencode("storch filter:images"), n = 100, include_rts = FALSE, lang = "de", token = twitter_token)
-
-names(merkel)
-View(storch_images)
-
-## plot time series of tweets frequency
-ts_plot(merkel, by = "hours", theme = "spacegray", main = "Tweets about Merkel")
+trump_bad <- search_tweets(URLencode("trump :("), n = 100, include_rts = FALSE, lang = "en", token = twitter_token)
+trump_good <- search_tweets(URLencode("trump :)"), n = 100, include_rts = FALSE, lang = "en", token = twitter_token)
+trump_images <- search_tweets(URLencode("trump filter:images"), n = 100, include_rts = FALSE, lang = "en", token = twitter_token)
 
 
 # check rate limits
@@ -127,56 +127,8 @@ user_timeline_df <- get_timeline("RDataCollection")
 names(user_timeline_df)
 user_favorites_df <- get_favorites("RDataCollection")
 names(user_favorites_df)
-
-
-## explore followers/friends ------------------
-
-user_id <- lookup_users("simonsaysnothin")$user_id
-followers <- get_followers("simonsaysnothin")
-friends <- get_friends("simonsaysnothin")
-
-twitter_names <- c("AnaKubli", "annapellegatta", "caromatamoros", "cusimanof",
-                   "dgohla", "jonvrushi", "luciacizmaziova", "nadinaiacob",
-                   "PresRamirez", "RubenZoest", "simonsaysnothin", "sjash87",
-                   "donata64", "RummelJa", "bernstmeng")
-
-# retrieve user ids, followers, friends
-user_id_list <- list()
-user_followers <- list()
-user_friends <- list()
-for (i in seq_along(twitter_names)) {
-  user_id_list[[i]] <- lookup_users(twitter_names[i])$user_id
-  user_followers[[i]] <- get_followers(twitter_names[i])
-  user_friends[[i]] <- get_friends(twitter_names[i])
-}
-
-# user id df
-user_id_df <- data.frame(name = twitter_names, user_id = unlist(user_id_list), stringsAsFactors = FALSE)
-
-# user friends df
-user_friends_df <- do.call(rbind.fill, user_friends[1:14])
-names(user_friends_df) <- c("name", "friend_id")
-user_friends_df <- merge(user_friends_df, user_id_df, by = "name", all.x = TRUE)
-
-# user followers df
-user_followers_list <- list()
-for(i in 1:14) {
-  user_followers_list[[i]] <- data.frame(name = twitter_names[i], user_followers = user_followers[[i]]$user_id, stringsAsFactors = FALSE)
-}
-user_followers_df <- do.call(rbind.fill, user_followers_list)
-names(user_followers_df) <- c("name", "follower_id")
-user_followers_df <- merge(user_followers_df, user_id_df, by = "name", all.x = TRUE)
-
-table(user_friends_df$friend_id) %>% sort(decreasing = T) %>% .[1:10] %>% names
-lookup_users("252087644")$name
-lookup_users("813286")$name
-lookup_users("127908397")$name
-lookup_users("5988062")$name
-lookup_users("14677919")$name
-lookup_users("4111954900")$name
-lookup_users("807095")$name
-
-
+followers <- get_followers("RDataCollection")
+friends <- get_friends("RDataCollection")
 
 
 

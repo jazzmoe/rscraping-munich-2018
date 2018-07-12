@@ -6,7 +6,7 @@
         <string>spiegelheadlines</string>
         <key>ProgramArguments</key>
         <array>
-                <string>/Users/munzerts/github/rscraping-hu-2017/spiegel_scraper.R</string>
+                <string>/Users/s.munzert/GitHub/rscraping-munich-2018/code/spiegel_scraper.r</string>
         </array>
 	    <key>StartInterval</key>
 	    <integer>10</integer>

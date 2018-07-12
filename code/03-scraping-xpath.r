@@ -1,10 +1,9 @@
 ### -----------------------------
 ## simon munzert
-## web scraping
+## xpath
 ### -----------------------------
 
-## load packages -----------------
-library(rvest)
+source("packages.r")
 
 
 ## parse HTML --------------------
@@ -37,12 +36,6 @@ html_nodes(parsed_doc, xpath = "//i")
 html_nodes(parsed_doc, xpath = "/html/body/div/*/i")
 html_nodes(parsed_doc, xpath = "/html/body/*/i") # does not work
 
-# navigational operators
-html_nodes(parsed_doc, xpath = "//title/..")
-
-# pipe operator
-html_nodes(parsed_doc, xpath = "//address | //title")
-
 
 ## expressing node relationships in XPath ------------
 
@@ -60,13 +53,11 @@ html_nodes(parsed_doc, xpath = "//title/parent::*")
 ## predicates in XPath ------------------------
 
 # numeric
-html_nodes(parsed_doc, xpath = "//div/p[position()=1]")
+html_nodes(parsed_doc, xpath = "//div/p[1]")
 html_nodes(parsed_doc, xpath =  "//div/p[last()]")
-html_nodes(parsed_doc, xpath = "//div/p[last()-1]")
 html_nodes(parsed_doc, xpath = "//div[count(.//a)>0]")
 html_nodes(parsed_doc, xpath = "//div[count(./@*)>2]")
 html_nodes(parsed_doc, xpath = "//*[string-length(text())>50]")
-html_nodes(parsed_doc, xpath = "//div[not(count(./@*)>2)]")
 
 # text-based
 html_nodes(parsed_doc, xpath = "//div[@date='October/2011']")

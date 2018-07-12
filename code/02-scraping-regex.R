@@ -102,33 +102,9 @@ unlist(str_extract_all(example.obj, "[12-]"))
 str_extract(example.obj, "([:alpha:]).+?\\1")
 str_extract(example.obj, "(\\b[a-z]+\\b).+?\\1")
 
-# assertions
-unlist(str_extract_all(example.obj, "(?<=2. ).+")) # positive lookbehind: (?<=...)
-unlist(str_extract_all(example.obj, ".+(?=2)")) # positive lookahead (?=...)
-unlist(str_extract_all(example.obj, "(?<!Blah )tiny.+")) # negative lookbehind: (?<!...)
-unlist(str_extract_all(example.obj, "sentence.+(?!Bla)")) # negative lookahead (?!...)
-
 # do you think you can master regular expressions now?
 browseURL("http://stackoverflow.com/questions/201323/using-a-regular-expression-to-validate-an-email-address/201378#201378") # think again
 
-
-
-
-######################
-### IT'S YOUR SHOT ###
-######################
-
-## 1. describe the types of strings that conform to the following regular expressions and construct an example that is matched by the regular expression.
-str_extract_all("Phone 150$, PC 690$", "[0-9]+\\$") # example
-"\\b[a-z]{1,4}\\b"
-".*?\\.txt$"
-"\\d{2}/\\d{2}/\\d{4}"
-"<(.+?)>.+?</\\1>"
-
-## 2. consider the mail address  chunkylover53[at]aol[dot]com.
-# a) transform the string to a standard mail format using regular expressions.
-# b) imagine we are trying to extract the digits in the mail address using [:digit:]. explain why this fails and correct the expression.
-email <- "chunkylover53[at]aol[dot]com"
 
 
 
@@ -164,27 +140,6 @@ str_count(char.vec, "a")
 str_count(char.vec, "\\w+")
 str_length(char.vec)
 
-# duplication
-str_dup(char.vec, 3)
-
-# padding and trimming
-length.char.vec <- str_length(char.vec)
-char.vec <- str_pad(char.vec, width = max(length.char.vec), side = "both", pad = " ")
-char.vec
-str_trim(char.vec)
-
-# joining
-paste0("text", "manipulation")
-str_c("text", "manipulation")
-str_c("text", "manipulation", sep = " ")
-str_c(char.vec, collapse = "\n") %>% cat
-str_c("text", c("manipulation", "basics"), sep = " ")
-
-# approximate matching
-agrepl("Donald Trump", "Donald Drumpf", max.distance = list(all = 3))
-agrepl("Donald Trump", "Barack Obama", max.distance = list(all = 3))
-
-
 
 # a note on the stringi package
 # source: [https://goo.gl/XzEQai]
@@ -203,14 +158,12 @@ stri_escape_unicode("\u00b5")
 stri_unescape_unicode("\u00b5")
 stri_rand_lipsum(3)
 stri_rand_shuffle("hello")
-stri_rand_strings(100, 10, pattern = "[humboldt]")
+stri_rand_strings(100, 10, pattern = "[munich]")
 
 
 
 
-
-
-# character encoding ---------
+## character encoding ---------
 
 # some background on character encoding in general
 browseURL("https://en.wikipedia.org/wiki/Character_encoding")
@@ -223,7 +176,7 @@ browseURL("https://rstudio-pubs-static.s3.amazonaws.com/279354_f552c4c41852439f9
 
 
 
-# how to query your locale and (maybe) change it ---------
+## how to query your locale and (maybe) change it ---------
 
 # query your current locale
 Sys.getlocale()
@@ -243,7 +196,7 @@ if(nchar(LANG)) Sys.setlocale("LC_ALL", LANG)
 
 
 
-# how to declare or convert encodings ---------
+## how to declare or convert encodings ---------
 
 # sample from the list of available conversions
 (encodings <- length(iconvlist()))

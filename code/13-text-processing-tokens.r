@@ -37,13 +37,18 @@ toks$Labour[1:100]
 toks <- tokens(immig_corp, what = "sentence")
 toks$Labour[1:10]
 
-
 # clean up
 toks <- tokens(immig_corp, what = "word", 
                remove_numbers = TRUE,
                remove_punct = TRUE,
                remove_hyphens = TRUE)
 toks$Labour[1:10]
+
+# retrieve word stems
+tokens_wordstem(tokens(toks$Labour[1:10])) %>% unlist
+tokens_wordstem(tokens("Die Münchner essen ihre Weißwürste gerne vor Mittag"), language = "de") %>% unlist
+
+
 
 
 ## keyword-in-contexts ------------------------

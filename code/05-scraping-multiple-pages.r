@@ -1,6 +1,6 @@
 ### -----------------------------
 ## simon munzert
-## web scraping
+## scraping multiple pages
 ### -----------------------------
 
 
@@ -21,7 +21,7 @@ library(magrittr)
 ## example: fetching and analyzing jstatsoft download statistics
 
 # set temporary working directory
-tempwd <- ("data/jstatsoftStats")
+tempwd <- ("../data/jstatsoftStats")
 dir.create(tempwd)
 setwd(tempwd)
 
@@ -29,7 +29,7 @@ browseURL("http://www.jstatsoft.org/")
 
 # construct list of urls
 baseurl <- "http://www.jstatsoft.org/article/view/v"
-volurl <- paste0("0", seq(1,83,1))
+volurl <- paste0("0", seq(1,85,1))
 volurl[1:9] <- paste0("00", seq(1, 9, 1))
 issurl <- paste0("0", seq(1,9,1))
 urls_list <- paste0(baseurl, volurl)
@@ -54,7 +54,7 @@ length(list_files)
 # delete non-existing articles
 files_size <- sapply(list_files_path, file.size)
 table(files_size) %>% sort()
-delete_files <- list_files_path[files_size == 27131]
+delete_files <- list_files_path[files_size == 25566]
 sapply(delete_files, file.remove)
 list_files_path <-  list.files(folder, pattern = "0.*", full.names = TRUE) # update list of files
 
@@ -73,7 +73,6 @@ for (i in 1:length(list_files_path)) {
   numViews[i] <- statistics[i] %>% str_extract("[[:digit:]]+") %>% as.numeric()
   datePublish[i] <- statistics[i] %>% str_extract("[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}.$") %>% str_replace("\\.", "")
 }
-
 
 # construct data frame
 dat <- data.frame(authors = authors, title = title, numViews = numViews, datePublish = datePublish, stringsAsFactors = FALSE)
