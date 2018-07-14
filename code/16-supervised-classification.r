@@ -160,6 +160,7 @@ precision(preds==0, tweets$engaging[test]==0)
 recall(preds==0, tweets$engaging[test]==0)
 
 
+
 ## distributed gradient boosting with Xgboost ----------
 
 # If we really want the best performance at a low computational cost, the cutting-edge method many people are using is Distributed Gradient Boosting, based on the same ideas as boosted trees / random forests, implemented as `xgboost`. You can read more about the history of this package [here](https://homes.cs.washington.edu/~tqchen/2016/03/10/story-and-lessons-behind-the-evolution-of-xgboost.html).
@@ -170,8 +171,8 @@ recall(preds==0, tweets$engaging[test]==0)
 X <- as(twdfm, "dgCMatrix")
 
 # parameters to explore
-tryEta <- c(1,2)
-tryDepths <- c(1,2,4)
+tryEta <- c(.1, .3, .5)
+tryDepths <- c(3, 6)
 
 # placeholders for now
 bestEta = NA
@@ -186,7 +187,7 @@ max.depth = dp,
 eta = eta, 
 nthread = 4,
 nround = 500,
-nfold=5,
+nfold = 5,
 print_every_n = 100L,
 objective = "binary:logistic")
 # cross-validated accuracy

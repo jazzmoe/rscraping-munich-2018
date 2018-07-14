@@ -8,21 +8,19 @@
 source("packages.r")
 
 
-
 ## setup R + RSelenium -------------------------
 
 # install current version of Java SE Runtime Environment
-browseURL("http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html")
+browseURL("http://www.oracle.com/technetwork/java/javase/downloads/jre10-downloads-4417026.html")
 
-# load RSelenium
+# install and load RSelenium (currently not on CRAN)
+#devtools::install_github("johndharrison/binman")
+#devtools::install_github("johndharrison/wdman")
+#devtools::install_github("ropensci/RSelenium")
 library(RSelenium)
-
-# set up connection via RSelenium package
-# documentation: http://cran.r-project.org/web/packages/RSelenium/RSelenium.pdf
 
 # check currently installed version of Java
 system("java -version")
-#system("java -jar selenium-server-standalone-3.4.0.jar")
 
 
 ## example --------------------------

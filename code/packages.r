@@ -2,7 +2,6 @@
 # install packages from CRAN
 p_needed <- c("rvest", # scraping suite
               "httr", "httpuv", # suites to ease HTTP communication
-              "RSelenium", # access Selenium API
               "rtweet", "ROAuth", "ggmap", # access various web APIs
               "robotstxt", # parse robots.txt files
               "readr", # imports spreadsheet data

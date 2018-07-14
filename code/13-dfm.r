@@ -8,7 +8,7 @@
 source("packages.r")
 
 
-## construct a document-feature matrix (DFM) ---------------------
+## construct a document-feature matrix (DFM) --------
 
 # dfm() constructs a document-feature matrix (DFM) from a tokens object
 irish_toks <- tokens(data_corpus_irishbudget2010, remove_punct = TRUE)
@@ -20,7 +20,6 @@ irish_dfm
 irish_dfm <- dfm(data_corpus_irishbudget2010, remove_punct = TRUE)
 irish_dfm
 
-
 # dfm has many useful options
 irish_dfm <- dfm(data_corpus_irishbudget2010, 
                  tolower = TRUE,
@@ -30,7 +29,7 @@ irish_dfm <- dfm(data_corpus_irishbudget2010,
                  )
 irish_dfm
 
-# dealing with stop words
+# dealing with stopwords
 stopwords("english")
 stopwords("german")
 irish_dfm <- dfm(data_corpus_irishbudget2010, 
@@ -39,7 +38,7 @@ irish_dfm <- dfm(data_corpus_irishbudget2010,
                  verbose = TRUE)
 
 
-## do more things with DFMs ---------------------
+## do more things with DFMs -------
 
 # check number of documents, features, document names, feature names
 ndoc(irish_dfm)
@@ -58,14 +57,12 @@ topfeatures(irish_dfm, 10)
 prop_irish_dfm <- dfm_weight(irish_dfm, scheme  = "prop")
 topfeatures(prop_irish_dfm[1,])
 
-# weight frequency count by uniqueness of the features ("term frequency-inverse document frequency", tf-idf)
+# weight frequency count by uniqueness of the features ("term frequency-inverse document frequency", tf-idf); see https://en.wikipedia.org/wiki/Tf%E2%80%93idf 
 tfidf_irish_dfm <- dfm_tfidf(irish_dfm)
-
-# check top features in first document
 topfeatures(tfidf_irish_dfm[1,])
 
 
-## select features from DFM ---------------------
+## select features from DFM -----------
 
 nfeat(irish_dfm)
 
@@ -82,16 +79,7 @@ freq_irish_dfm <- dfm_trim(irish_dfm, min_termfreq = 10)
 nfeat(freq_irish_dfm)
 
 
-# look up dictionary -------------------
-
-# laver-garry.cat is a Wordstat dictionary that contain political left-right ideology keywords (Laver and Garry 2000)
-lg_dict <- dictionary(file = "data/laver-garry.cat")
-
-lg_dfm <- dfm_lookup(irish_dfm, lg_dict)
-head(lg_dfm)
-
-
-# group documents -------------------
+## group documents -------------------
 
 docvars(irish_dfm)
 party_dfm <- dfm_group(irish_dfm, groups = docvars(irish_dfm, "party"))

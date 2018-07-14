@@ -32,7 +32,7 @@ docvars(guardian_corp, 'week') <- week(docvars(guardian_corp, 'date'))
 guardian_corp <- corpus_subset(guardian_corp, year >= 2016)
 guardian_toks <- tokens(guardian_corp, remove_punct = TRUE)
 
-# check sentiment
+# check sentiment: compare tokens with dictionary
 lsd_toks <- tokens_lookup(guardian_toks, data_dictionary_LSD2015[1:2])
 head(lsd_toks, 2)
 
@@ -62,8 +62,6 @@ plot((eu_lsd_dfm[,2] - eu_lsd_dfm[,1]) / eu_n,
 axis(1, seq_len(ndoc(eu_lsd_dfm)), ymd("2016-01-01") + weeks(seq_len(ndoc(eu_lsd_dfm)) - 1))
 grid()
 abline(h = 0, lty = 2)
-
-
 
 
 ## case study ----------
@@ -126,5 +124,47 @@ anger_words <- liwc$word[liwc$class == "anger"]
 sample(anger_words, 10)
 anger <- dfm_lookup(fbdfm, dictionary = dictionary(list('anger' = anger_words)))
 anger*100
+
+
+
+
+
+# doing more with dictionaries -------------------
+
+# data 
+immig_corp <- corpus(data_char_ukimmig2010)
+toks <- tokens(immig_corp, what = "word")
+
+# retrieve dictionary
+newsmap_dict <- dictionary(file = "../data/newsmap.yml")
+names(newsmap_dict) # level 1
+names(newsmap_dict[['AFRICA']]) # level 2
+newsmap_dict[['AFRICA']][['NORTH']] # level 3
+newsmap_dict[['EUROPE']][['NORTH']] # level 3
+
+# look up regions
+region_toks <- tokens_lookup(toks, newsmap_dict, levels = 1)
+head(region_toks)
+
+# make document-feature matrix
+dfm(region_toks)
+
+# look up countries
+country_toks <- tokens_lookup(toks, newsmap_dict, levels = 3)
+head(country_toks)
+dfm(country_toks)
+
+# keywords in context
+kwic(toks, newsmap_dict['AFRICA'], window = 10)
+
+# create your own dictionary
+dict <- dictionary(list(refugee = c('refugee*', 'asylum*'),
+                        worker = c('worker*', 'employee*')))
+print(dict)
+
+dict_toks <- tokens_lookup(toks, dict)
+head(dict_toks)
+
+# note: tokens_lookup() ignores multiple matches of dictionary values for the same key with the same token to avoide double counting. For example, if US = c('United States of America', 'United States') is in your dictionary, you get ‘US’ only once for a sequence of tokens 'United' 'States' 'of' 'America'.
 
 
