@@ -25,7 +25,7 @@ cdfm <- dfm_trim(nytdfm, min_docfreq = 2)
 # estimate LDA with K topics
 K <- 30
 lda <- LDA(cdfm, k = K, method = "Gibbs", 
-           control = list(verbose=25L, seed = 123, burnin = 100, iter = 500))
+           control = list(verbose = 25L, seed = 123, burnin = 100, iter = 500))
 
 
 # get top `n` terms from the topic model
@@ -78,7 +78,7 @@ round(lda@gamma[1,], 2)
 # work with topic probabilities
 
 # Topic 15: financial crisis
-paste(terms[,15], collapse=", ")
+paste(terms[,15], collapse = ", ")
 # add probability to df
 nyt$prob_topic <- lda@gamma[,15]
 # now aggregate at the year level
@@ -86,6 +86,7 @@ agg <- aggregate(nyt$prob_topic, by=list(year=nyt$year), FUN=mean)
 # and plot it
 plot(agg$year, agg$x, type="l", xlab="Year", ylab="Avg. prob. of article about topic 15",
 main="Estimated proportion of articles about the financial crisis")
+
 
 
 ## Structural topic todeling-------------

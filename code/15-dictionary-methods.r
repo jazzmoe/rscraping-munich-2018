@@ -43,7 +43,8 @@ head(lsd_dfm, 5)
 # more targeted sentiment analysis
 eu <- c('EU', 'europ*', 'european union')
 eu_toks <- tokens_keep(guardian_toks, phrase(eu), window = 10)
-eu_toks[2]
+eu_toks[1]
+eu_toks[3]
 
 # grouped DFM
 eu_lsd_dfm <- dfm(eu_toks, dictionary = data_dictionary_LSD2015[1:2]) %>% 
@@ -64,7 +65,7 @@ grid()
 abline(h = 0, lty = 2)
 
 
-## case study ----------
+## dictionary analysis with new dictionary ----------
 
 # use dictionary method to identicy populist rhetoric in British parties' Facebook posts
 
@@ -128,8 +129,7 @@ anger*100
 
 
 
-
-# doing more with dictionaries -------------------
+# doing even more with dictionaries -------------------
 
 # data 
 immig_corp <- corpus(data_char_ukimmig2010)

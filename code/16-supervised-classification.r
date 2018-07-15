@@ -46,6 +46,11 @@ set.seed(123)
 training <- sample(1:nrow(tweets), floor(.80 * nrow(tweets)))
 test <- (1:nrow(tweets))[1:nrow(tweets) %in% training == FALSE]
 
+# check data
+length(training) # training set size
+length(test) # test set size
+ncol(twdfm[training,]) # number of features
+
 
 # run regularized regression with glmnet
   # note: other packages available, such as caret or mlr, but glmnet tends to be faster and has cross-validation built in
@@ -61,7 +66,6 @@ ridge <- cv.glmnet(twdfm[training,], # x matrix
                    parallel = TRUE, # enable parallel computing
                    intercept = TRUE, # intecept to be fitted?
                    type.measure = "class")
-plot(ridge)
 
 ## function to compute accuracy
 accuracy <- function(ypred, y){
@@ -137,12 +141,13 @@ head(beta)
 df <- data.frame(coef = as.numeric(beta),
                  word = names(beta), stringsAsFactors = F)
 
-df <- df[order(df$coef),]
-head(df[,c("coef", "word")], n = 30)
-paste(df$word[1:30], collapse = ", ")
 df <- df[order(df$coef, decreasing = TRUE),]
 head(df[,c("coef", "word")], n = 30)
 paste(df$word[1:30], collapse = ", ") # coefficients for some features actually became zero
+
+df <- df[order(df$coef),]
+head(df[,c("coef", "word")], n = 30)
+paste(df$word[1:30], collapse = ", ")
 
 
 # elastic net 
@@ -191,21 +196,21 @@ for(eta in tryEta){
 for(dp in tryDepths){	
 bst <- xgb.cv(data = X[training,], 
 label =  tweets$engaging[training], 
-max.depth = dp,
-eta = eta, 
+max.depth = dp, # maximum depth of the tree; default is 6
+eta = eta, # step size shrinkage (between 0 and 1), lower values better against overfitting
 nthread = 4,
-nround = 500,
+nround = 500, # maximum number of boosting iterations
 nfold = 5,
 print_every_n = 100L,
-objective = "binary:logistic")
+objective = "binary:logistic") # define learning objective
 # cross-validated accuracy
-acc <- 1-mean(tail(bst$evaluation_log$test_error_mean))
+acc <- 1 - mean(tail(bst$evaluation_log$test_error_mean))
 cat("Results for eta=",eta," and depth=", dp, " : ",
 acc," accuracy.\n",sep="")
-if(acc>bestAcc){
-bestEta=eta
-bestAcc=acc
-bestDepth=dp
+if(acc > bestAcc){
+bestEta = eta
+bestAcc = acc
+bestDepth = dp
 }
 }
 }
@@ -251,8 +256,8 @@ sign <- apply(sums, 1, which.max)
 
 df <- data.frame(
 Feature = labels, 
-sign = sign-1,
-stringsAsFactors=F)
+sign = sign - 1,
+stringsAsFactors = FALSE)
 importance <- merge(importance, df, by="Feature")
 
 ## best predictors
