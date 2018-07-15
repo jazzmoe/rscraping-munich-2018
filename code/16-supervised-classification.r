@@ -11,29 +11,37 @@ source("packages.r")
 ## regularized regression ----------
 
 # random sample of nearly 5,000 tweets mentioning the names of the candidates to the 2014 EP elections in the UK. 
-# focus on variable named `communication`, which indicates whether each tweet was hand-coded as being __engaging__ (a tweet that tries to engage with the audience of the account) or __broadcasting__ (just sending a message, without trying to elicit a response)
-# source: Yannis Theocharis, Pablo Barberá, Zoltan Fazekas, and Sebastian Popa,, Journal of Communication. (http://onlinelibrary.wiley.com/doi/10.1111/jcom.12259/abstract). 
-
+# source: Yannis Theocharis, Pablo Barberá, Zoltan Fazekas, and Sebastian Popa, Journal of Communication. (http://onlinelibrary.wiley.com/doi/10.1111/jcom.12259/abstract). 
+# focus on variable named `communication`, which indicates whether each tweet was hand-coded as being 
+  # engaging (a tweet that tries to engage with the audience of the account) or   
+  # broadcasting (just sending a message, without trying to elicit a response)
 
 # import data
-tweets <- read.csv("../data/UK-tweets.csv", stringsAsFactors=F)
-tweets$engaging <- ifelse(tweets$communication=="engaging", 1, 0)
+tweets <- read.csv("../data/UK-tweets.csv", stringsAsFactors = F)
+tweets$engaging <- ifelse(tweets$communication == "engaging", 1, 0)
 tweets <- tweets[!is.na(tweets$engaging),]
+head(tweets)
+
+# inspect tweets
+set.seed(42)
+filter(tweets, engaging == 1) %>% sample_n(5) %>% select(text)
+filter(tweets, engaging == 0) %>% sample_n(5) %>% select(text)
 
 # substitute handles with @ to avoid overfitting
-tweets$text <- gsub('@[0-9_A-Za-z]+', '@', tweets$text)
+tweets$text <- str_replace_all(tweets$text, '@[0-9_A-Za-z]+', '@')
+tweets$text[1:10]
 
 # further preprocessing
 twcorpus <- corpus(tweets$text)
-summary(twcorpus)
+summary(twcorpus, 10)
 
 # keep only tokens that appear in 2 or more tweets
-# keep punctuation -- it turns out it can be quite informative.
-twdfm <- dfm(twcorpus, remove=stopwords("english"), remove_url=TRUE, 
-             ngrams=1:2, verbose=TRUE) # 
-twdfm <- dfm_trim(twdfm, min_docfreq = 2, verbose=TRUE)
+# keep punctuation -- it turns out to be quite informative.
+twdfm <- dfm(twcorpus, remove = stopwords("english"), remove_url = TRUE, 
+             ngrams = 1:2, verbose = TRUE) 
+twdfm <- dfm_trim(twdfm, min_docfreq = 2, verbose = TRUE)
 
-# split into training and test set
+# split into training and test set (80% / 20%)
 set.seed(123)
 training <- sample(1:nrow(tweets), floor(.80 * nrow(tweets)))
 test <- (1:nrow(tweets))[1:nrow(tweets) %in% training == FALSE]
@@ -44,14 +52,14 @@ test <- (1:nrow(tweets))[1:nrow(tweets) %in% training == FALSE]
 
 # ridge regression
 parallel::detectCores()
-registerDoMC(cores=3) # parallel computing on multiple cores using the doMC package 
+registerDoMC(cores = 3) # parallel computing on multiple cores using the doMC package 
 ridge <- cv.glmnet(twdfm[training,], # x matrix
                    tweets$engaging[training],  # y response
-                   family = "binomial", # family
-                   alpha = 0, 
+                   family = "binomial", # family; here: dichotomous response
+                   alpha = 0, # elastic net mixing parameter; alpha = 0 --> ridge, alpha = 1 --> lasso
                    nfolds = 5, # k-folds cross-validation
                    parallel = TRUE, # enable parallel computing
-                   intercept = TRUE,
+                   intercept = TRUE, # intecept to be fitted?
                    type.measure = "class")
 plot(ridge)
 
@@ -77,10 +85,10 @@ table(preds, tweets$engaging[test]) # confusion matrix
 
 # performance metrics
 accuracy(preds, tweets$engaging[test])
-precision(preds==1, tweets$engaging[test]==1)
-recall(preds==1, tweets$engaging[test]==1)
-precision(preds==0, tweets$engaging[test]==0)
-recall(preds==0, tweets$engaging[test]==0)
+precision(preds == 1, tweets$engaging[test] == 1)
+recall(preds == 1, tweets$engaging[test] == 1)
+precision(preds == 0, tweets$engaging[test] == 0)
+recall(preds == 0, tweets$engaging[test] == 0)
 
 
 # from the different values of lambda, let's pick the highest one that is within one standard error of the best one 
