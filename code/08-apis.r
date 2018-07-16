@@ -23,11 +23,11 @@ browseURL("https://cran.r-project.org/web/views/WebTechnologies.html")
 browseURL("http://ip-api.com/")
 
 # ipapi package
-#devtools::install_github("hrbrmstr/ipapi")
+devtools::install_github("hrbrmstr/ipapi")
 library(ipapi)
 
 # function call
-ip_df <- geolocate(c(NA, "", "10.0.1.1", "72.33.67.89", "www.spiegel.de", "search.twitter.com"), .progress=TRUE)
+ip_df <- geolocate(c(NA, "", "10.0.1.1", "72.33.67.89", "www.spiegel.de", "search.twitter.com"), .progress = TRUE)
 View(ip_df)
 
 
@@ -43,7 +43,7 @@ browseURL("http://developer.nytimes.com/")
 
 # use API
 library(rtimes)
-load("/Users/s.munzert/Munzert Dropbox/Simon Munzert/rkeys.RDa")
+load("/Users/simonmunzert/Munzert Dropbox/Simon Munzert/rkeys.RDa")
 Sys.setenv(NYTIMES_AS_KEY = nytimes_apikey)
 
 terms <- c("John McCain", "Nancy Pelosi", "Bernie Sanders", "Al Franken", "Marco Rubio", "Paul Ryan", "Elizabeth Warren", "Mitch McConnell", "Tim Kaine", "Dianne Feinstein")

@@ -45,7 +45,7 @@ save(TwitterToR_twitterkey,
 appname <- "TwitterToR" # <--- add your Twitter App name here!
 
 ## api key (example below is not a real key)
-load("/Users/s.munzert/Munzert Dropbox/Simon Munzert/rkeys.RDa") # <--- adapt path here; see above!
+load("/Users/simonmunzert/Munzert Dropbox/Simon Munzert/rkeys.RDa") # <--- adapt path here; see above!
 
 ## register app
 twitter_token <- create_token(
@@ -86,7 +86,7 @@ q <- paste0("merkel,trump,macron")
 twitter_stream <- stream_tweets(q = q, timeout = 30, token = twitter_token)
 
 # set up directory and JSON dump
-rtweet.folder <- "data/rtweet-data"
+rtweet.folder <- "../data/rtweet-data"
 dir.create(rtweet.folder)
 streamname <- "politicians"
 filename <- file.path(rtweet.folder, paste0(streamname, "_", format(Sys.time(), "%F-%H-%M-%S"), ".json"))

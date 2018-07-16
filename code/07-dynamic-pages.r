@@ -33,6 +33,7 @@ remDr <- rD[["client"]]
 url <- "http://www.iea.org/policiesandmeasures/renewableenergy/"
 remDr$navigate(url)
 
+
 # open regions menu
 xpath <- '//*[@id="main"]/div/form/div[1]/ul/li[1]/span'
 regionsElem <- remDr$findElement(using = 'xpath', value = xpath)
@@ -40,7 +41,7 @@ regionsElem$clickElement() # click on button
 
 
 # selection "European Union"
-xpath <- '//*[@id="main"]/div/form/div[1]/ul/li[1]/ul/li[5]/label/input'
+xpath <- '//*[@id="main"]/div/form/div[1]/ul/li[1]/ul/li[5]/label'
 euElem <- remDr$findElement(using = 'xpath', value = xpath)
 selectEU <- euElem$clickElement() # click on button
 
