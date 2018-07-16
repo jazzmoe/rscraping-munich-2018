@@ -4,12 +4,8 @@
 ### -----------------------------
 
 
-## load packages -----------------
-
-library(rvest)
-library(stringr)
-library(magrittr)
-
+## preparations -----------------------
+source("packages.r")
 
 ## dealing with multiple pages ----------
 
@@ -70,8 +66,8 @@ for (i in 1:length(list_files_path)) {
   authors[i] <- table_out[1,2]
   title[i] <- table_out[2,2]
   statistics[i] <- table_out[4,2]
-  numViews[i] <- statistics[i] %>% str_extract("[[:digit:]]+") %>% as.numeric()
-  datePublish[i] <- statistics[i] %>% str_extract("[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}.$") %>% str_replace("\\.", "")
+  numViews[i] <- statistics[i] %>% str_extract("[:digit:]+") %>% as.numeric()
+  datePublish[i] <- statistics[i] %>% str_extract("[:digit:]{4}-[:digit:]{2}-[:digit:]{2}.$") %>% str_replace("\\.", "")
 }
 
 # construct data frame

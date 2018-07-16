@@ -19,6 +19,7 @@ library(stringr)
 
 # 1. specify URL
 url <- "https://www.nytimes.com"
+browseURL(url)
 
 # 2. download static HTML behind the URL and parse it
 url_parsed <- read_html(url)
@@ -45,7 +46,9 @@ length(headings)
   # ... come with standard tags and are usually easily identifiable
 
 ## scraping HTML tables with rvest
-url_p <- read_html("https://en.wikipedia.org/wiki/List_of_MPs_elected_in_the_United_Kingdom_general_election,_1992")
+url <- "https://en.wikipedia.org/wiki/List_of_MPs_elected_in_the_United_Kingdom_general_election,_1992"
+browseURL(url)
+url_p <- read_html(url)
 tables <- html_table(url_p, header = TRUE, fill = TRUE)
 mps <- tables[[4]]
 head(mps)
@@ -73,6 +76,8 @@ browseURL("https://www.nytimes.com")
 
 url <- "https://www.nytimes.com"
 xpath <-  '//*[contains(concat( " ", @class, " " ), concat( " ", "story-heading", " " ))]//a'
+
+
 url_parsed <- read_html(url)
 html_nodes(url_parsed, xpath = xpath) %>% html_text()
 
